@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pending Requests</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #4b2a3b, #b16b6d);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      color: white;
+    }
+    .container {
+      max-width: 600px;
+      padding: 30px;
+      border-radius: 15px;
+      background-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #f8e71c;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+    }
+
+    .telegram-field {
+      margin: 20px 0;
+      font-size: 1.2em;
+    }
+
+    .telegram-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 1.2em;
+      color: #00acee;
+      text-decoration: none;
+      background-color: white;
+      padding: 8px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .telegram-link:hover {
+      background-color: #e0f7fa;
+      color: #0078b8;
+    }
+
+    .request {
+      background-color: rgba(255, 255, 255, 0.3);
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .request.pending { border: 2px solid #ffbf00; }
+    .request.approved { border: 2px solid #00ff00; }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      cursor: pointer;
+      margin: 8px;
+      border-radius: 8px;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+    }
+    button.accept {
+      background-color: #4CAF50;
+      color: white;
+    }
+    button.reject {
+      background-color: #f44336;
+      color: white;
+      position: relative;
+    }
+    button.accept:hover { background-color: #45a049; }
+    button.reject:hover { background-color: #e53935; }
+
+    .love-message {
+      font-size: 1.3em;
+      color: #ff66b3;
+      font-weight: bold;
+      display: none;
+      animation: pulse 2s infinite;
+    }
+
+    .sochlo-message,
+    .manJaonaMessage {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .sochlo-message {
+      color: #ff9800;
+      animation: bounce 1s infinite;
+    }
+
+    .manJaonaMessage {
+      color: #ff5722;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    .credit {
+      font-size: 1.3em;
+      color: #f8e71c;
+      margin-top: 30px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Pending Requests</h1>
+
+    <div class="telegram-field">
+      <a href="https://t.me/AGENTSUKHI" target="_blank" class="telegram-link">📨 @AGENTSUKHI</a>
+    </div>
+
+    <div class="request pending" id="sukhi-request">
+      <p><strong>Sukhi</strong> - Pending</p>
+      <button class="accept" onclick="acceptRequest()">Accept</button>
+      <button class="reject" id="rejectButton" onclick="rejectRequest()">Reject</button>
+      <p id="sochloMessage" class="sochlo-message">Soch lo, phir reject karna... 🧐</p>
+      <p id="manJaonaMessage" class="manJaonaMessage">Man jao na please 🥺</p>
+    </div>
+
+    <div id="loveMessage" class="love-message">
+      ❤ Kabhi socha na tha zindagi mein yeh pal aayega, Sukhi ka haan kehna dil ko itna bhaayega. ❤
+    </div>
+
+    <div class="credit">Credit byy SUKHI 🫰🏻</div>
+  </div>
+
+  <script>
+    let rejectCount = 0;
+    let runaway = false;
+
+    function acceptRequest() {
+      const request = document.getElementById('sukhi-request');
+      request.classList.remove('pending');
+      request.classList.add('approved');
+      document.getElementById('loveMessage').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('loveMessage').style.display = 'none';
+      }, 8000);
+    }
+
+    function rejectRequest() {
+      const rejectButton = document.getElementById('rejectButton');
+      const sochlo = document.getElementById('sochloMessage');
+      const manjao = document.getElementById('manJaonaMessage');
+
+      rejectCount++;
+
+      if (rejectCount === 1) {
+        showTemporaryMessage(sochlo);
+      } else if (rejectCount === 2) {
+        showTemporaryMessage(manjao);
+      } else if (rejectCount === 3) {
+        showTemporaryMessage(sochlo);
+      } else if (rejectCount === 4 && !runaway) {
+        runaway = true;
+        runAwayButton(rejectButton);
+      }
+    }
+
+    function showTemporaryMessage(element) {
+      element.style.display = 'block';
+      const originalColor = element.style.color;
+      element.style.color = 'black';
+
+      setTimeout(() => {
+        element.style.color = originalColor;
+        element.style.display = 'none';
+      }, 10000);
+    }
+
+    function runAwayButton(button) {
+      let posX = 0;
+      let direction = 1;
+      let speed = 5;
+
+      const runawayInterval = setInterval(() => {
+        posX += direction * speed;
+        button.style.transform = `translateX(${posX}px)`;
+        speed += 2;
+
+        if (Math.abs(posX) > 800) {
+          clearInterval(runawayInterval);
+          button.style.display = 'none';
+        }
+      }, 30);
+    }
+  </script>
+</body>
+</html>
